@@ -18,7 +18,7 @@ class MyApp(CementApp):
         base_controller = 'base'
         extensions = ['tabulate']
         output_handler = 'tabulate'
-        handlers = [base.BaseController, milestones.MilestonesController, reports.ReportsController]
+        handlers = [base.BaseController, milestones.MilestonesController, reports.ReportsController, labels.LabelsController]
 
 
 if __name__ == '__main__':

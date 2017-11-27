@@ -72,3 +72,22 @@ class ReportProjectsPrompt(GitlabcpcBasePrompt):
 class ReportMilestoneNamePrompt(GitlabcpcBasePrompt):
     class Meta:
         text = "Enter the milestone name:"
+
+class LabelNamePrompt(GitlabcpcBasePrompt):
+    class Meta:
+        text = "Enter the label name:"
+
+class LabelColorPrompt(GitlabcpcBasePrompt):
+    class Meta:
+        text = "Enter the label color code:"
+
+    def process_input(self):
+        if len(self.input) < 7 or not self.input[0] == '#':
+            print("You entered an invalid color format, color ignored")
+            self.input = ''
+
+class LabelCreationConfirmationPrompt(GitlabcpcBasePrompt):
+    class Meta:
+        text = "Are you sure you wanna create this label across all your gitlab projects?"
+        options = ['yes', 'no']
+        default = 'no'
