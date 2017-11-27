@@ -55,7 +55,7 @@ class MilestonesCreationDueDatePrompt(DatePrompt):
 
 class ReportGenerationConfirmationPrompt(GitlabcpcBasePrompt):
     class Meta:
-        text = "Select the report number you wanna generate"
+        text = "Select the report number you wanna generate:"
         default = '1'
 
 class ReportMilestonesPrompt(GitlabcpcBasePrompt):
@@ -68,3 +68,7 @@ class ReportProjectsPrompt(GitlabcpcBasePrompt):
         text = "Run report on all projects or on a specific list?"
         default = 'yes'
         options = ['all', 'list']
+
+class ReportMilestoneNamePrompt(GitlabcpcBasePrompt):
+    class Meta:
+        text = "Enter the milestone name:"

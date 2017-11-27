@@ -15,7 +15,8 @@ class ReportsController(CementBaseController):
         description = "reports generation subcommand."
         arguments = [ ( [ '-ac', '--active'], dict(action='store', help='Generate the report only on the active sprints (Default: yes)')),
                 (['-all', '--all-projects'], dict(action='store', help='Generate the report on all the projects (Default: yes')),
-                (['-ml', '--milestone-name'], dict(action='store', help='Milestone name (if multiple projects share the same milestone name the report will be generated across all projects)'))
+                (['-ml', '--milestone-name'], dict(action='store', help='Milestone name (if multiple projects share the same milestone name the report will be generated across all projects)')),
+                (['-o', '--output'], dict(action='store', help='Output csv file (defaults to <report-name>-date.csv)'))
                 ]
 
     @expose(help='Gitlab basic reporting', aliases=['rpt'])
@@ -36,4 +37,6 @@ class ReportsController(CementBaseController):
 
         report = __import__("reports."+ options[gen], fromlist=[''])
         report = report.Report(self.app.gl, self.app.pargs)
+        report.get_params()
         report.generate()
+        report.render()
