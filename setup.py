@@ -7,5 +7,5 @@ setup(name='gitlabcpc',
       author='Abdelrahman Ghareeb',
       author_email='abdelrahman@slashproc.net',
       license='GPL3',
-      packages=['python-gitlab', 'cement', 'pyspin'],
+      install_requires=['python-gitlab', 'cement', 'pyspin'],
       zip_safe=False)
