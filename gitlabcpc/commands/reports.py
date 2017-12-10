@@ -21,7 +21,7 @@ class ReportsController(CementBaseController):
 
     @expose(help='Gitlab basic reporting', aliases=['rpt'])
     def default(self):
-        self.app.log.info("start date: %s" % self.app.pargs.start_date)
+        print(self.Meta.description)
     @expose(help='Generate report')
     def generate(self):
         i = 0
