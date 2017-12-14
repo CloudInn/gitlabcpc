@@ -91,3 +91,8 @@ class LabelCreationConfirmationPrompt(GitlabcpcBasePrompt):
         text = "Are you sure you wanna create this label across all your gitlab projects?"
         options = ['yes', 'no']
         default = 'no'
+class LabelDeletionConfirmationPrompt(GitlabcpcBasePrompt):
+    class Meta:
+        text = "Are you sure you want to delete this label across all your gitlab projects?"
+        options = ['yes', 'no']
+        default = 'no'

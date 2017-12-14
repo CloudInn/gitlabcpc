@@ -32,3 +32,24 @@ class LabelsController(CementBaseController):
             for project in self.app.gl.projects.all(per_page=100):
                 print("Creating label for project %s" % project.name)
                 project.labels.create(label)
+
+    @expose(help='Delete a label across all projects')
+    def delete(self):
+        label = {}
+        label_name = LabelNamePrompt().input
+        if label_name == '':
+            print("A label must have a name")
+            sys.exit(1)
+        proceed = LabelDeletionConfirmationPrompt().input
+        if proceed == 'yes':
+            for project in self.app.gl.projects.all(per_page=100):
+                try:
+                    label = project.labels.get(label_name)
+                except:
+                    print("Label doesn't exist for the project %s" % project.name)
+                    continue
+                if label.delete():
+                    print("Deleted label for project %s" % project.name)
+                else:
+                    print("Failed to delete the label, check your gitlab permissions")
+
