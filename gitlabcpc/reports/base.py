@@ -53,19 +53,12 @@ class BaseReport():
                         formatter = getattr(importlib.import_module("misc"), "format_"+self.data[key][head]['formatter'])
                         writer.writerow(['', head, formatter(self.data[key][head]['value'])])
                     else:
-                        writer.writerow(['', head, self.data[key][head]['value']])
+                        if isinstance(self.data[key][head]['value'], list):
+                            writer.writerow(['', '', head])
+                            for item in self.data[key][head]['value']:
+                                writer.writerow(['', '', '', item])
+                        else:
+                            writer.writerow(['', head, self.data[key][head]['value']])
+
 
         print("Report saved at: %s.csv" %self.output)
-
-
-
-
-
-
-
-
-
-
-
-
-

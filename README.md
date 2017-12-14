@@ -13,7 +13,7 @@ in every project, etc..
 
 1. Milestones creation
 2. Label creation
-3. Reporting (There's only one functional report now: Estimated Hours per milestone)
+3. Reporting (There are only three functional reports now: Estimated Hours per milestone, Time spent per milestone, Unestimated issues per milestone)
 
 ### TODO
 
