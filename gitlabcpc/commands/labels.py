@@ -30,8 +30,17 @@ class LabelsController(CementBaseController):
         proceed = LabelCreationConfirmationPrompt().input
         if proceed == 'yes':
             for project in self.app.gl.projects.all(per_page=100):
-                print("Creating label for project %s" % project.name)
-                project.labels.create(label)
+                try:
+                    old_label = project.labels.get(label['name'])
+                    print("Label already exists for the project %s" % project.name)
+                    continue
+                except:
+                    if project.labels.create(label):
+                        print("Created label for project %s" % project.name)
+                    else:
+                        print("Failed to create the label, check your gitlab permissions")
+
+
 
     @expose(help='Delete a label across all projects')
     def delete(self):
