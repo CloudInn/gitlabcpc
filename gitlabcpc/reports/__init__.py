@@ -1,2 +1,2 @@
 
-__all__ = ['base', 'ehpm', 'hspd', 'uaipm', 'ueipm', 'tspm']
+__all__ = ['base', 'ehpm', 'hspd', 'ueipm', 'tspm']

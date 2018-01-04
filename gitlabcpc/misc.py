@@ -18,3 +18,12 @@ def format_seconds(seconds):
     m, s = divmod(seconds, 60)
     h, m = divmod(m, 60)
     return "%d:%02d:%02d" % (h, m, s)
+
+def _get_working_hours(start_date, end_date, weekend_start="Sun"):
+    """ Get the number of available work hours in a georgian calendar's date period.
+    Assumptions made:
+        - Weekends are two days long (Saturday & Sunday or Friday & Saturday)
+        - every day has a maximum of 7 hours available
+    """
+
+    pass

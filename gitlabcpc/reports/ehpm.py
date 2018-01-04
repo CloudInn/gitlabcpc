@@ -40,9 +40,15 @@ class Report(BaseReport):
             else:
                 data['projects'][projects[issue.project_id]] = {'value': issue_estimate, 'formatter': 'seconds' }
 
-            if issue.assignee.username in data['engineers']:
-                data['engineers'][issue.assignee.username]['value'] = data['engineers'][issue.assignee.username]['value'] + issue_estimate
+            if issue.assignee:
+                if issue.assignee.username in data['engineers']:
+                    data['engineers'][issue.assignee.username]['value'] = data['engineers'][issue.assignee.username]['value'] + issue_estimate
+                else:
+                    data['engineers'][issue.assignee.username] = {'value': issue_estimate, 'formatter': 'seconds' }
             else:
-                data['engineers'][issue.assignee.username] = {'value': issue_estimate, 'formatter': 'seconds' }
+                if 'unassigned' in data['engineers']:
+                    data['engineers']['unassigned']['value'] = data['engineers']['unassigned']['value'] + issue_estimate
+                else:
+                    data['engineers']['unassigned'] = {'value': issue_estimate, 'formatter': 'seconds' }
 
         self.data = data

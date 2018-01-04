@@ -15,18 +15,19 @@ class Report(BaseReport):
     def get_params(self):
         if not self.milestone_name:
             self.milestone_name = ReportMilestoneNamePrompt().input
-    @make_spin(Default, "Generating...")
+#    @make_spin(Default, "Generating...")
     def generate(self):
 
         issues = []
 
         projects = {}
 
+
         for project in self.gitlab.projects.all(per_page=100):
             projects[project.id] = project.name
-            for milestone in project.milestones.list():
+            for milestone in project.milestones.list(per_page=1000):
                 if self.milestone_name and milestone.title == self.milestone_name:
-                    issues = issues + milestone.issues()
+                    issues = issues + milestone.issues(per_page=10000)
 
         data = {'total_spent': {'label': 'Total hours', "Hours": {'value': 0, 'formatter': 'seconds'}},
                 'projects': {'label': 'Per project'},
@@ -40,9 +41,13 @@ class Report(BaseReport):
             else:
                 data['projects'][projects[issue.project_id]] = {'value': issue_spent, 'formatter': 'seconds' }
 
-            if issue.assignee.username in data['engineers']:
-                data['engineers'][issue.assignee.username]['value'] = data['engineers'][issue.assignee.username]['value'] + issue_spent
+            if not issue.assignee:
+                engineer = 'Unassigned'
             else:
-                data['engineers'][issue.assignee.username] = {'value': issue_spent, 'formatter': 'seconds' }
+                engineer = issue.assignee.name
+            if engineer in data['engineers']:
+                data['engineers'][engineer]['value'] = data['engineers'][engineer]['value'] + issue_spent
+            else:
+                data['engineers'][engineer] = {'value': issue_spent, 'formatter': 'seconds' }
 
         self.data = data
