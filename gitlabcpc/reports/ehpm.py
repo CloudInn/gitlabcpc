@@ -24,9 +24,9 @@ class Report(BaseReport):
 
         for project in self.gitlab.projects.all(per_page=100):
             projects[project.id] = project.name
-            for milestone in project.milestones.list():
+            for milestone in project.milestones.list(per_page=100):
                 if self.milestone_name and milestone.title == self.milestone_name:
-                    issues = issues + milestone.issues()
+                    issues = issues + milestone.issues(per_page=100)
 
         data = {'total_estimate': {'label': 'Total hours', "Hours": {'value': 0, 'formatter': 'seconds'}},
                 'projects': {'label': 'Per project'},

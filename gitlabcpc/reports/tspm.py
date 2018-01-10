@@ -15,7 +15,7 @@ class Report(BaseReport):
     def get_params(self):
         if not self.milestone_name:
             self.milestone_name = ReportMilestoneNamePrompt().input
-#    @make_spin(Default, "Generating...")
+    @make_spin(Default, "Generating...")
     def generate(self):
 
         issues = []
