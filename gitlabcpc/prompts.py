@@ -96,3 +96,16 @@ class LabelDeletionConfirmationPrompt(GitlabcpcBasePrompt):
         text = "Are you sure you want to delete this label across all your gitlab projects?"
         options = ['yes', 'no']
         default = 'no'
+class IssueCloseConfirmationPrompt(GitlabcpcBasePrompt):
+    class Meta:
+        text = "Are you sure you want to close all the issue which fall under this criteria?"
+        options = ['yes', 'no']
+        default = 'no'
+class MilestoneNamePrompt(GitlabcpcBasePrompt):
+    class Meta:
+        text = "Enter the milestone name:"
+    def process_input(self):
+        if len(self.input) < 1:
+            print("You did not specify a milestone name")
+            self.input = ''
+
