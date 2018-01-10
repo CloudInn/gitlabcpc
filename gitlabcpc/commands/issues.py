@@ -1,11 +1,8 @@
-import collections
-from cement.core.foundation import CementApp
 from cement.core.controller import CementBaseController, expose
 from cement.utils import shell
 from prompts import *
 from misc import *
-import reports
-import copy
+import sys
 
 class IssuesController(CementBaseController):
     class Meta:
@@ -20,7 +17,6 @@ class IssuesController(CementBaseController):
 
     @expose(help='Close issues based on a label & a milestone')
     def close(self):
-        label = {}
         label_name = LabelNamePrompt().input
         if label_name == '':
             print("A label must be provided")
