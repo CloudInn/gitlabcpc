@@ -1,7 +1,6 @@
 from cement.core.foundation import CementApp
-from cement.core.controller import CementBaseController, expose
-from commands import *
-from misc import *
+from commands import (base, milestones, reports, labels, issues, branches)
+from misc import populate_gitlab_config
 import gitlab
 import fnmatch
 
@@ -18,7 +17,9 @@ class MyApp(CementApp):
         base_controller = 'base'
         extensions = ['tabulate']
         output_handler = 'tabulate'
-        handlers = [base.BaseController, milestones.MilestonesController, reports.ReportsController, labels.LabelsController, issues.IssuesController]
+        handlers = [base.BaseController, milestones.MilestonesController,
+                    reports.ReportsController, labels.LabelsController,
+                    issues.IssuesController, branches.BranchesController]
 
 
 if __name__ == '__main__':
