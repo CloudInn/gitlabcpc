@@ -109,3 +109,48 @@ class MilestoneNamePrompt(GitlabcpcBasePrompt):
             print("You did not specify a milestone name")
             self.input = ''
 
+
+class BranchNamePrompt(GitlabcpcBasePrompt):
+    class Meta:
+        text = "Enter the branch name:"
+
+
+class BranchCreationConfirmationPrompt(GitlabcpcBasePrompt):
+    class Meta:
+        text = "Are you sure you wanna create this branch across all your gitlab projects?"
+        options = ['yes', 'no']
+        default = 'no'
+
+
+class BranchDeletionConfirmationPrompt(GitlabcpcBasePrompt):
+    class Meta:
+        text = "Are you sure you want to delete this branch across all your gitlab projects?"
+        options = ['yes', 'no']
+        default = 'no'
+
+
+class BranchProtectConfirmationPrompt(GitlabcpcBasePrompt):
+    class Meta:
+        text = "Are you sure you want to protect this branch across all your gitlab projects?"
+        options = ['yes', 'no']
+        default = 'no'
+
+
+class BranchUnprotectConfirmationPrompt(GitlabcpcBasePrompt):
+    class Meta:
+        text = "Are you sure you want to unprotect this branch across all your gitlab projects?"
+        options = ['yes', 'no']
+        default = 'no'
+
+
+class BranchSetDefaultConfirmationPrompt(GitlabcpcBasePrompt):
+    class Meta:
+        text = "Are you sure you want to set this branch as default across all your gitlab projects?"
+        options = ['yes', 'no']
+        default = 'no'
+
+class BranchCreateConfirmationPrompt(GitlabcpcBasePrompt):
+    class Meta:
+        text = "Are you sure you want to create this branch across all your gitlab projects?"
+        options = ['yes', 'no']
+        default = 'no'
