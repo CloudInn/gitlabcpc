@@ -3,11 +3,12 @@ from prompts import (BranchNamePrompt, BranchCreationConfirmationPrompt,
                      BranchDeletionConfirmationPrompt,
                      BranchProtectConfirmationPrompt,
                      BranchUnprotectConfirmationPrompt,
-                     BranchSetDefaultConfirmationPrompt,
-                     BranchCreateConfirmationPrompt
+                     BranchSetDefaultConfirmationPrompt
                     )
-from misc import *
 import sys
+from gitlab.exceptions import (GitlabCreateError, GitlabAuthenticationError,
+                           GitlabUpdateError, GitlabDeleteError,
+                           GitlabGetError)
 
 class BranchesController(CementBaseController):
     class Meta:
@@ -43,13 +44,16 @@ class BranchesController(CementBaseController):
             for project in self.app.gl.projects.all(per_page=100):
                 try:
                     branch = project.branches.get(branch_name)
-                except:
+                except (GitlabGetError, GitlabAuthenticationError):
                     self.print_warning("Branch doesn't exist for the project %s" % project.name)
                     continue
-                if branch.delete():
-                    self.print_info("Deleted branch for project %s" % project.name)
-                else:
-                    self.print_error("Failed to delete the branch, check your gitlab permissions")
+                try:
+                    if branch.delete():
+                        self.print_info("Deleted branch for project %s" % project.name)
+                    else:
+                        self.print_error("Failed to delete the branch, check your gitlab permissions")
+                except (GitlabAuthenticationError, GitlabDeleteError):
+                        self.print_error("Failed to delete the branch, check your gitlab permissions")
 
     @expose(help='Protect a branch across all projects')
     def protect(self):
@@ -62,7 +66,7 @@ class BranchesController(CementBaseController):
             for project in self.app.gl.projects.all(per_page=100):
                 try:
                     branch = project.branches.get(branch_name)
-                except:
+                except (GitlabGetError, GitlabAuthenticationError):
                     self.print_warning("Branch doesn't exist for the project %s" % project.name)
                     continue
                 branch.protect()
@@ -82,7 +86,7 @@ class BranchesController(CementBaseController):
             for project in self.app.gl.projects.all(per_page=100):
                 try:
                     branch = project.branches.get(branch_name)
-                except:
+                except (GitlabGetError, GitlabAuthenticationError):
                     self.print_warning("Branch doesn't exist for the project %s" % project.name)
                     continue
                 branch.unprotect()
@@ -102,14 +106,14 @@ class BranchesController(CementBaseController):
             for project in self.app.gl.projects.all(per_page=100):
                 try:
                     project.branches.get(branch_name)
-                except:
+                except (GitlabGetError, GitlabAuthenticationError):
                     self.print_warning("Branch doesn't exist for the project %s" % project.name)
                     continue
                 project.default_branch = branch_name
                 try:
                     project.save()
                     self.print_info("Default branch set for project %s" % project.name)
-                except:
+                except (GitlabUpdateError, GitlabAuthenticationError):
                     self.print_error("Failed to set default branch, check your gitlab permissions for project %s" % project.name)
 
     @expose(help='Create branch across all projects')
@@ -118,12 +122,12 @@ class BranchesController(CementBaseController):
         if branch_name == '':
             print("A branch must have a name")
             sys.exit(1)
-        proceed = BranchCreateConfirmationPrompt().input
+        proceed = BranchCreationConfirmationPrompt().input
         if proceed == 'yes':
             for project in self.app.gl.projects.all(per_page=100):
                 try:
                     project.branches.create({'branch': branch_name,
                                              'ref': project.default_branch})
                     self.print_info("Created branch for project %s" % project.name)
-                except:
+                except (GitlabCreateError, GitlabAuthenticationError):
                     self.print_error("Failed to create branch, check your gitlab permissions for project %s" % project.name)

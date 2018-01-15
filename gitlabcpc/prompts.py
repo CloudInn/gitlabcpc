@@ -149,8 +149,3 @@ class BranchSetDefaultConfirmationPrompt(GitlabcpcBasePrompt):
         options = ['yes', 'no']
         default = 'no'
 
-class BranchCreateConfirmationPrompt(GitlabcpcBasePrompt):
-    class Meta:
-        text = "Are you sure you want to create this branch across all your gitlab projects?"
-        options = ['yes', 'no']
-        default = 'no'
