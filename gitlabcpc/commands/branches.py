@@ -3,12 +3,12 @@ from prompts import (BranchNamePrompt, BranchCreationConfirmationPrompt,
                      BranchDeletionConfirmationPrompt,
                      BranchProtectConfirmationPrompt,
                      BranchUnprotectConfirmationPrompt,
-                     BranchSetDefaultConfirmationPrompt
-                    )
-import sys
+                     BranchSetDefaultConfirmationPrompt)
 from gitlab.exceptions import (GitlabCreateError, GitlabAuthenticationError,
-                           GitlabUpdateError, GitlabDeleteError,
-                           GitlabGetError)
+                               GitlabUpdateError, GitlabDeleteError,
+                               GitlabGetError)
+import sys
+
 
 class BranchesController(CementBaseController):
     class Meta:
@@ -31,7 +31,8 @@ class BranchesController(CementBaseController):
 
     @expose(help='Gitlab branches management', aliases=['lbl'])
     def default(self):
-        print("Use one of the create, delete, protect, unprotect and set_default subcommands")
+        print("Use one of the create, delete, protect, unprotect and "
+              "set_default subcommands")
 
     @expose(help='Delete a branch across all projects')
     def delete(self):
@@ -45,15 +46,19 @@ class BranchesController(CementBaseController):
                 try:
                     branch = project.branches.get(branch_name)
                 except (GitlabGetError, GitlabAuthenticationError):
-                    self.print_warning("Branch doesn't exist for the project %s" % project.name)
+                    self.print_warning("Branch doesn't exist for the project "
+                                       "%s" % project.name)
                     continue
                 try:
                     if branch.delete():
-                        self.print_info("Deleted branch for project %s" % project.name)
+                        self.print_info("Deleted branch for project %s" %
+                                        project.name)
                     else:
-                        self.print_error("Failed to delete the branch, check your gitlab permissions")
+                        self.print_error("Failed to delete the branch, check "
+                                         "your gitlab permissions")
                 except (GitlabAuthenticationError, GitlabDeleteError):
-                        self.print_error("Failed to delete the branch, check your gitlab permissions")
+                        self.print_error("Failed to delete the branch, check "
+                                         "your gitlab permissions")
 
     @expose(help='Protect a branch across all projects')
     def protect(self):
@@ -67,13 +72,16 @@ class BranchesController(CementBaseController):
                 try:
                     branch = project.branches.get(branch_name)
                 except (GitlabGetError, GitlabAuthenticationError):
-                    self.print_warning("Branch doesn't exist for the project %s" % project.name)
+                    self.print_warning("Branch doesn't exist for the project "
+                                       "%s" % project.name)
                     continue
                 branch.protect()
                 if branch.protected:
-                    self.print_info("Protected branch for project %s" % project.name)
+                    self.print_info("Protected branch for project %s"
+                                    % project.name)
                 else:
-                    self.print_error("Failed to protect the branch, check your gitlab permissions")
+                    self.print_error("Failed to protect the branch, check "
+                                     "your gitlab permissions")
 
     @expose(help='Unprotect a branch across all projects')
     def unprotect(self):
@@ -87,13 +95,17 @@ class BranchesController(CementBaseController):
                 try:
                     branch = project.branches.get(branch_name)
                 except (GitlabGetError, GitlabAuthenticationError):
-                    self.print_warning("Branch doesn't exist for the project %s" % project.name)
+                    self.print_warning("Branch doesn't exist for the project "
+                                       "%s" % project.name)
                     continue
                 branch.unprotect()
                 if not branch.protected:
-                    self.print_info("Unprotected branch for project %s" % project.name)
+                    self.print_info("Unprotected branch for project %s" %
+                                    project.name)
                 else:
-                    self.print_error("Failed to set default branch, check your gitlab permissions for project %s" % project.name)
+                    self.print_error("Failed to set default branch, check "
+                                     "your gitlab permissions for project "
+                                     "%s" % project.name)
 
     @expose(help='Set default branch across all projects')
     def set_default(self):
@@ -107,14 +119,18 @@ class BranchesController(CementBaseController):
                 try:
                     project.branches.get(branch_name)
                 except (GitlabGetError, GitlabAuthenticationError):
-                    self.print_warning("Branch doesn't exist for the project %s" % project.name)
+                    self.print_warning("Branch doesn't exist for the project "
+                                       "%s" % project.name)
                     continue
                 project.default_branch = branch_name
                 try:
                     project.save()
-                    self.print_info("Default branch set for project %s" % project.name)
+                    self.print_info("Default branch set for project %s" %
+                                    project.name)
                 except (GitlabUpdateError, GitlabAuthenticationError):
-                    self.print_error("Failed to set default branch, check your gitlab permissions for project %s" % project.name)
+                    self.print_error("Failed to set default branch, check "
+                                     "your gitlab permissions for project %s"
+                                     % project.name)
 
     @expose(help='Create branch across all projects')
     def create(self):
@@ -128,6 +144,9 @@ class BranchesController(CementBaseController):
                 try:
                     project.branches.create({'branch': branch_name,
                                              'ref': project.default_branch})
-                    self.print_info("Created branch for project %s" % project.name)
+                    self.print_info("Created branch for project %s" %
+                                    project.name)
                 except (GitlabCreateError, GitlabAuthenticationError):
-                    self.print_error("Failed to create branch, check your gitlab permissions for project %s" % project.name)
+                    self.print_error("Failed to create branch, check your "
+                                     "gitlab permissions for project %s" %
+                                     project.name)
