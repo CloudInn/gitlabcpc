@@ -1,8 +1,8 @@
 from cement.core.controller import CementBaseController, expose
-from cement.utils import shell
-from prompts import *
-from misc import *
+from prompts import (LabelNamePrompt, IssueCloseConfirmationPrompt,
+                     MilestoneNamePrompt)
 import sys
+
 
 class IssuesController(CementBaseController):
     class Meta:
@@ -26,7 +26,9 @@ class IssuesController(CementBaseController):
         if proceed == 'yes':
             for project in self.app.gl.projects.all(per_page=100):
                 closed = 0
-                for issue in project.issues.list(milestone=milestone, labels=[label_name], state='opened'):
+                for issue in project.issues.list(
+                      milestone=milestone,
+                      labels=[label_name], state='opened'):
                     issue.state_event = 'close'
                     issue.save()
                     closed += 1
