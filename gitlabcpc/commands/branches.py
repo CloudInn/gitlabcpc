@@ -3,7 +3,8 @@ from prompts import (BranchNamePrompt, BranchCreationConfirmationPrompt,
                      BranchDeletionConfirmationPrompt,
                      BranchProtectConfirmationPrompt,
                      BranchUnprotectConfirmationPrompt,
-                     BranchSetDefaultConfirmationPrompt)
+                     BranchSetDefaultConfirmationPrompt,
+                     RefBranchNamePrompt)
 from gitlab.exceptions import (GitlabCreateError, GitlabAuthenticationError,
                                GitlabUpdateError, GitlabDeleteError,
                                GitlabGetError)
@@ -29,7 +30,7 @@ class BranchesController(CementBaseController):
         txt = '\x1b[6;30;41m%s\x1b[0m %s' % ('ERROR!', msg)
         print(txt)
 
-    @expose(help='Gitlab branches management', aliases=['lbl'])
+    @expose(help='Gitlab branches management')
     def default(self):
         print("Use one of the create, delete, protect, unprotect and "
               "set_default subcommands")
@@ -136,14 +137,18 @@ class BranchesController(CementBaseController):
     def create(self):
         branch_name = BranchNamePrompt().input
         if branch_name == '':
-            print("A branch must have a name")
+            print("New branch must have a name")
+            sys.exit(1)
+        ref_branch_name = RefBranchNamePrompt().input
+        if ref_branch_name == '':
+            print("You must enter reference branch name")
             sys.exit(1)
         proceed = BranchCreationConfirmationPrompt().input
         if proceed == 'yes':
             for project in self.app.gl.projects.all(per_page=100):
                 try:
                     project.branches.create({'branch': branch_name,
-                                             'ref': project.default_branch})
+                                             'ref': ref_branch_name})
                     self.print_info("Created branch for project %s" %
                                     project.name)
                 except (GitlabCreateError, GitlabAuthenticationError):
