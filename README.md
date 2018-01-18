@@ -12,8 +12,14 @@ in every project, etc..
 ### Features
 
 1. Milestones creation
-2. Label creation
-3. Reporting (There are only three functional reports now: Estimated Hours per milestone, Time spent per milestone, Unestimated issues per milestone)
+2. Labels creation
+3. Branches creation, deletion, protection, unprotection and setting as default
+4. Reporting (There are only three functional reports now: Estimated Hours per milestone, Time spent per milestone, Unestimated issues per milestone)
+
+
+### Warning
+
+Deleting branches is a dangerous operation, and it is very likely you won't need it. So use it with caution.
 
 ### TODO
 
@@ -42,14 +48,23 @@ create a personal access token.
 ### Usage
 
 
-* Milestone creation
+* Milestones creation
 ```
 pickle@rick:~/$ gitlabcpc milestones create
 ```
 
-* Label creation
+* Labels creation
 ```
 pickle@rick:~/$ gitlabcpc labels create
+```
+
+* Branches operations
+```
+pickle@rick:~/$ gitlabcpc branches create
+pickle@rick:~/$ gitlabcpc branches delete
+pickle@rick:~/$ gitlabcpc branches protect
+pickle@rick:~/$ gitlabcpc branches unprotect
+pickle@rick:~/$ gitlabcpc branches set-default
 ```
 
 * Generate report

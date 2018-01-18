@@ -143,6 +143,11 @@ class BranchNamePrompt(GitlabcpcBasePrompt):
         text = "Enter the branch name:"
 
 
+class RefBranchNamePrompt(GitlabcpcBasePrompt):
+    class Meta:
+        text = "Enter reference branch name:"
+
+
 class BranchCreationConfirmationPrompt(GitlabcpcBasePrompt):
     class Meta:
         text = "Are you sure you wanna create this branch across all your "
