@@ -1,5 +1,4 @@
 from cement.core.controller import CementBaseController, expose
-from cement.utils import shell
 from prompts import *
 from misc import *
 import sys
@@ -26,7 +25,7 @@ class IssuesController(CementBaseController):
         if proceed == 'yes':
             for project in self.app.gl.projects.all(per_page=100):
                 closed = 0
-                for issue in project.issues.list(milestone=milestone, labels=[label_name], state='opened'):
+                for issue in project.issues.list(milestone=milestone, labels=[label_name], state='opened', per_page=100):
                     issue.state_event = 'close'
                     issue.save()
                     closed += 1
