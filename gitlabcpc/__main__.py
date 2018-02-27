@@ -48,8 +48,7 @@ if __name__ == '__main__':
 
     #Authenticate gitlab
     try:
-        app.gl = gitlab.Gitlab(config['url'], config['secret'])
-
+        app.gl = gitlab.Gitlab(config['url'], config['secret'], api_version=4)
     except:
         print("Couldn't connect to the gitlab instance %t" % config['name'])
 
