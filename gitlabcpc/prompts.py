@@ -1,16 +1,19 @@
 """Cement custom prompts
 
-This module contains all the custom Cement prompts we'll use for all of our subcommands
+This module contains all the custom Cement prompts we'll use for all of our
+subcommands
 
 """
 
 from cement.utils.shell import Prompt
 from datetime import datetime
 
+
 class GitlabcpcBasePrompt(Prompt):
     class Meta:
         options_separator = '|'
         max_attempts = 99
+
 
 class MilestonesCreationDescriptionPrompt(GitlabcpcBasePrompt):
     class Meta:
@@ -21,11 +24,14 @@ class MilestonesCreationDescriptionPrompt(GitlabcpcBasePrompt):
         if self.input == '':
             print("No description was entered")
 
+
 class MilestonesCreationConfirmationPrompt(GitlabcpcBasePrompt):
     class Meta:
-        text = "Are you sure you wanna create a milestone with those parameters? This action can not be undone"
+        text = ("Are you sure you wanna create a milestone with those"
+                " parameters? This action can not be undone")
         options = ['yes', 'no']
         default = 'no'
+
 
 class DatePrompt(GitlabcpcBasePrompt):
     class Meta:
@@ -36,19 +42,24 @@ class DatePrompt(GitlabcpcBasePrompt):
 
     def process_input(self):
         try:
-            self.input = datetime.strptime(self.input.lower() , '%Y-%m-%d')
-        except:
-            print("You entered an invalid format, %s ignored" % self.Meta.label)
+            self.input = datetime.strptime(self.input.lower(), '%Y-%m-%d')
+        except Exception as e:
+            print("You entered an invalid format, %s ignored" %
+                  self.Meta.label)
             self.input = ''
+
 
 class MilestonesCreationStartDatePrompt(DatePrompt):
     class Meta:
-        text = "Enter the milestone start date in the format %s:" % DatePrompt.Meta.date_format
+        text = ("Enter the milestone start date in the format %s:" %
+                DatePrompt.Meta.date_format)
         label = "start date"
+
 
 class MilestonesCreationDueDatePrompt(DatePrompt):
     class Meta:
-        text = "Enter the milestone due date in the format %s:" % DatePrompt.Meta.date_format
+        text = ("Enter the milestone due date in the format %s:" %
+                DatePrompt.Meta.date_format)
         label = "due date"
 
 
@@ -57,24 +68,31 @@ class ReportGenerationConfirmationPrompt(GitlabcpcBasePrompt):
         text = "Select the report number you wanna generate:"
         default = '1'
 
+
 class ReportMilestonesPrompt(GitlabcpcBasePrompt):
     class Meta:
-        text = "Run report only on active milestones with the same identical name (created by gitlabcpc)?"
+        text = "Run report only on active milestones with the same identical "
+        "name (created by gitlabcpc)?"
         default = 'yes'
         options = ['yes', 'no']
+
+
 class ReportProjectsPrompt(GitlabcpcBasePrompt):
     class Meta:
         text = "Run report on all projects or on a specific list?"
         default = 'yes'
         options = ['all', 'list']
 
+
 class ReportMilestoneNamePrompt(GitlabcpcBasePrompt):
     class Meta:
         text = "Enter the milestone name:"
 
+
 class LabelNamePrompt(GitlabcpcBasePrompt):
     class Meta:
         text = "Enter the label name:"
+
 
 class LabelColorPrompt(GitlabcpcBasePrompt):
     class Meta:
@@ -85,24 +103,35 @@ class LabelColorPrompt(GitlabcpcBasePrompt):
             print("You entered an invalid color format, color ignored")
             self.input = ''
 
+
 class LabelCreationConfirmationPrompt(GitlabcpcBasePrompt):
     class Meta:
-        text = "Are you sure you wanna create this label across all your gitlab projects?"
+        text = "Are you sure you wanna create this label across all your "
+        "gitlab projects?"
         options = ['yes', 'no']
         default = 'no'
+
+
 class LabelDeletionConfirmationPrompt(GitlabcpcBasePrompt):
     class Meta:
-        text = "Are you sure you want to delete this label across all your gitlab projects?"
+        text = "Are you sure you want to delete this label across all your "
+        "gitlab projects?"
         options = ['yes', 'no']
         default = 'no'
+
+
 class IssueCloseConfirmationPrompt(GitlabcpcBasePrompt):
     class Meta:
-        text = "Are you sure you want to close all the issue which fall under this criteria?"
+        text = "Are you sure you want to close all the issue which fall "
+        "under this criteria?"
         options = ['yes', 'no']
         default = 'no'
+
+
 class MilestoneNamePrompt(GitlabcpcBasePrompt):
     class Meta:
         text = "Enter the milestone name:"
+
     def process_input(self):
         if len(self.input) < 1:
             print("You did not specify a milestone name")
@@ -140,3 +169,52 @@ class IssuesExportClosedPrompt(GitlabcpcBasePrompt):
         if not self.input == 'y':
             print("will only export open issues")
             self.input = 'opened'
+            
+class BranchNamePrompt(GitlabcpcBasePrompt):
+    class Meta:
+        text = "Enter the branch name:"
+
+
+class RefBranchNamePrompt(GitlabcpcBasePrompt):
+    class Meta:
+        text = "Enter reference branch name:"
+
+
+class BranchCreationConfirmationPrompt(GitlabcpcBasePrompt):
+    class Meta:
+        text = "Are you sure you wanna create this branch across all your "
+        "gitlab projects?"
+        options = ['yes', 'no']
+        default = 'no'
+
+
+class BranchDeletionConfirmationPrompt(GitlabcpcBasePrompt):
+    class Meta:
+        text = "Are you sure you want to delete this branch across all your "
+        "gitlab projects?"
+        options = ['yes', 'no']
+        default = 'no'
+
+
+class BranchProtectConfirmationPrompt(GitlabcpcBasePrompt):
+    class Meta:
+        text = "Are you sure you want to protect this branch across all your "
+        "gitlab projects?"
+        options = ['yes', 'no']
+        default = 'no'
+
+
+class BranchUnprotectConfirmationPrompt(GitlabcpcBasePrompt):
+    class Meta:
+        text = "Are you sure you want to unprotect this branch across all "
+        "your gitlab projects?"
+        options = ['yes', 'no']
+        default = 'no'
+
+
+class BranchSetDefaultConfirmationPrompt(GitlabcpcBasePrompt):
+    class Meta:
+        text = "Are you sure you want to set this branch as default across "
+        "all your gitlab projects?"
+        options = ['yes', 'no']
+        default = 'no'

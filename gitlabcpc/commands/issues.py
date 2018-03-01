@@ -5,6 +5,7 @@ import datetime
 import sys
 import csv
 
+
 class IssuesController(CementBaseController):
     class Meta:
         label = 'issues'

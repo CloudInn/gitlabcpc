@@ -1,5 +1,6 @@
 from cement.core.controller import CementBaseController, expose
 
+
 class BaseController(CementBaseController):
     class Meta:
         label = 'base'
@@ -8,5 +9,3 @@ class BaseController(CementBaseController):
     @expose(hide=True)
     def default(self):
         self.app.args.print_help()
-
-

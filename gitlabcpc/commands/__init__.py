@@ -1,3 +1,3 @@
 
 
-__all__ = ['base', 'milestones', 'reports', 'labels', 'issues']
+__all__ = ['base', 'milestones', 'reports', 'labels', 'issues', 'branches']

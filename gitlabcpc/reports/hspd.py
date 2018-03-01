@@ -5,4 +5,3 @@ and the total number of hours they spent
 """
 
 __version__ = "0.1"
-

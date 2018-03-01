@@ -1,11 +1,8 @@
-import collections
-from cement.core.foundation import CementApp
 from cement.core.controller import CementBaseController, expose
-from cement.utils import shell
-from prompts import *
-from misc import *
+from prompts import ReportGenerationConfirmationPrompt
 import reports
 import copy
+
 
 class ReportsController(CementBaseController):
     class Meta:
@@ -13,15 +10,29 @@ class ReportsController(CementBaseController):
         stacked_on = 'base'
         stacked_type = 'nested'
         description = "reports generation subcommand."
-        arguments = [ ( [ '-ac', '--active'], dict(action='store', help='Generate the report only on the active sprints (Default: yes)')),
-                (['-all', '--all-projects'], dict(action='store', help='Generate the report on all the projects (Default: yes')),
-                (['-ml', '--milestone-name'], dict(action='store', help='Milestone name (if multiple projects share the same milestone name the report will be generated across all projects)')),
-                (['-o', '--output'], dict(action='store', help='Output csv file (defaults to <report-name>-date.csv)'))
-                ]
+        arguments = [
+            (["-ac", "--active"],
+             dict(action="store",
+                  help="Generate the report only on the active sprints "
+                  "(Default: yes)")),
+            (["-all", "--all-projects"],
+             dict(action="store",
+                  help="Generate the report on all the projects "
+                  "(Default: yes")),
+            (["-ml", "--milestone-name"],
+             dict(action="store", help="Milestone name (if multiple "
+                  "projects share the same milestone name the report "
+                  "will be generated across all projects)")),
+            (["-o", "--output"],
+             dict(action="store",
+                  help="Output csv file (defaults to "
+                  "<report-name>-date.csv)"))
+        ]
 
     @expose(help='Gitlab basic reporting', aliases=['rpt'])
     def default(self):
         print(self.Meta.description)
+
     @expose(help='Generate report')
     def generate(self):
         i = 0
@@ -35,7 +46,7 @@ class ReportsController(CementBaseController):
             options[i] = copy.deepcopy(report)
         gen = int(ReportGenerationConfirmationPrompt().input)
 
-        report = __import__("reports."+ options[gen], fromlist=[''])
+        report = __import__("reports." + options[gen], fromlist=[''])
         report = report.Report(self.app.gl, self.app.pargs)
         report.get_params()
         report.generate()

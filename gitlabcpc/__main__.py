@@ -1,13 +1,12 @@
 from cement.core.foundation import CementApp
-from cement.core.controller import CementBaseController, expose
-from commands import *
-from misc import *
+from commands import (base, milestones, reports, labels, issues, branches)
+from misc import populate_gitlab_config
 import gitlab
 import fnmatch
 
 
-#gitlabcpc is a small utility command line tool which is used mainly to
-#create milestones across all projects on a gitlab instance at once
+# gitlabcpc is a small utility command line tool which is used mainly to
+# create milestones across all projects on a gitlab instance at once
 
 __version__ = "1.0"
 
@@ -18,7 +17,9 @@ class MyApp(CementApp):
         base_controller = 'base'
         extensions = ['tabulate']
         output_handler = 'tabulate'
-        handlers = [base.BaseController, milestones.MilestonesController, reports.ReportsController, labels.LabelsController, issues.IssuesController]
+        handlers = [base.BaseController, milestones.MilestonesController,
+                    reports.ReportsController, labels.LabelsController,
+                    issues.IssuesController, branches.BranchesController]
 
 
 if __name__ == '__main__':

@@ -1,11 +1,12 @@
-import collections
-from cement.core.foundation import CementApp
 from cement.core.controller import CementBaseController, expose
-from cement.utils import shell
-from prompts import *
-from misc import *
-import reports
-import copy
+from prompts import (LabelNamePrompt,
+                     LabelColorPrompt,
+                     LabelCreationConfirmationPrompt,
+                     LabelDeletionConfirmationPrompt)
+from gitlab.exceptions import (GitlabAuthenticationError,
+                               GitlabGetError)
+import sys
+
 
 class LabelsController(CementBaseController):
     class Meta:
@@ -31,16 +32,16 @@ class LabelsController(CementBaseController):
         if proceed == 'yes':
             for project in self.app.gl.projects.all(per_page=100):
                 try:
-                    old_label = project.labels.get(label['name'])
-                    print("Label already exists for the project %s" % project.name)
+                    project.labels.get(label['name'])
+                    print("Label already exists for the project %s" %
+                          project.name)
                     continue
-                except:
+                except (GitlabGetError, GitlabAuthenticationError):
                     if project.labels.create(label):
                         print("Created label for project %s" % project.name)
                     else:
-                        print("Failed to create the label, check your gitlab permissions")
-
-
+                        print("Failed to create the label, check your "
+                              "gitlab permissions")
 
     @expose(help='Delete a label across all projects')
     def delete(self):
@@ -54,11 +55,12 @@ class LabelsController(CementBaseController):
             for project in self.app.gl.projects.all(per_page=100):
                 try:
                     label = project.labels.get(label_name)
-                except:
-                    print("Label doesn't exist for the project %s" % project.name)
+                except (GitlabGetError, GitlabAuthenticationError):
+                    print("Label doesn't exist for the project %s" %
+                          project.name)
                     continue
                 if label.delete():
                     print("Deleted label for project %s" % project.name)
                 else:
-                    print("Failed to delete the label, check your gitlab permissions")
-
+                    print("Failed to delete the label, check your "
+                          "gitlab permissions")
