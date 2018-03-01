@@ -38,6 +38,8 @@ class Report(BaseReport):
                 'engineers': {'label': 'Per Engineer'}}
 
         for issue in issues:
+            if issue.state == 'closed':
+                continue
             issue_estimate = issue.time_stats()['time_estimate']
             data['total_estimate']['Hours']['value'] += issue_estimate
             if projects[issue.project_id] in data['projects']:

@@ -42,7 +42,7 @@ class DatePrompt(GitlabcpcBasePrompt):
 
     def process_input(self):
         try:
-            datetime.strptime(self.input.lower(), '%Y-%m-%d')
+            self.input = datetime.strptime(self.input.lower(), '%Y-%m-%d')
         except Exception as e:
             print("You entered an invalid format, %s ignored" %
                   self.Meta.label)
@@ -137,7 +137,39 @@ class MilestoneNamePrompt(GitlabcpcBasePrompt):
             print("You did not specify a milestone name")
             self.input = ''
 
-
+class IssuesExportProjectPrompt(GitlabcpcBasePrompt):
+    class Meta:
+        text = "Enter project names in a comma separated list unless you wanna export every issue across all projects:"
+        default = ''
+    def process_input(self):
+        if len(self.input) < 1:
+            print("You didn't specify a project name, issues will be exported from all projects")
+            self.input = ''
+class IssuesExportLabelPrompt(GitlabcpcBasePrompt):
+    class Meta:
+        text = "Wanna filter by label? enter the label name:"
+        default = ''
+    def process_input(self):
+        if len(self.input) < 1:
+            print("You didn't specify a label, issues will be exported regardless of labels")
+            self.input = ''
+class IssuesExportMilestonePrompt(GitlabcpcBasePrompt):
+    class Meta:
+        text = "Wanna filter by milestone? enter the milestone name:"
+        default = ''
+    def process_input(self):
+        if len(self.input) < 1:
+            print("You didn't specify a milestone, issues will be exported regardless of milestones")
+            self.input = ''
+class IssuesExportClosedPrompt(GitlabcpcBasePrompt):
+    class Meta:
+        text = "Include closed issues? [y/n]:"
+        default = ''
+    def process_input(self):
+        if not self.input == 'y':
+            print("will only export open issues")
+            self.input = 'opened'
+            
 class BranchNamePrompt(GitlabcpcBasePrompt):
     class Meta:
         text = "Enter the branch name:"
