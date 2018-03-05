@@ -15,6 +15,7 @@ in every project, etc..
 2. Labels creation
 3. Branches creation, deletion, protection, unprotection and setting as default
 4. Reporting (There are only three functional reports now: Estimated Hours per milestone, Time spent per milestone, Unestimated issues per milestone)
+5. Export issues
 
 
 ### Warning
@@ -51,6 +52,11 @@ create a personal access token.
 * Milestones creation
 ```
 pickle@rick:~/$ gitlabcpc milestones create
+```
+
+* Export issues
+```
+pickle@rick:~/$ gitlabcpc issues export
 ```
 
 * Labels creation
