@@ -44,7 +44,7 @@ class MilestonesController(CementBaseController):
 
         proceed = MilestonesCreationConfirmationPrompt().input
         if proceed == 'yes':
-            for project in self.app.gl.projects.all(per_page=100):
+            for project in self.app.gl.projects.list(per_page=100):
                 print("Creating milestone for project %s...." % project.name)
                 project.milestones.create(milestone)
         else:
@@ -52,7 +52,7 @@ class MilestonesController(CementBaseController):
 
     @expose(help='list active milestones')
     def list(self):
-        projects = self.app.gl.projects.all(per_page=100)
+        projects = self.app.gl.projects.list(per_page=100)
         i = 0
         for project in projects:
             for milestone in project.milestones.list(state='active'):

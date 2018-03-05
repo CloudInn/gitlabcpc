@@ -42,7 +42,7 @@ class DatePrompt(GitlabcpcBasePrompt):
 
     def process_input(self):
         try:
-            self.input = datetime.strptime(self.input.lower(), '%Y-%m-%d')
+            datetime.strptime(self.input, '%Y-%m-%d')
         except Exception as e:
             print("You entered an invalid format, %s ignored" %
                   self.Meta.label)
@@ -169,7 +169,7 @@ class IssuesExportClosedPrompt(GitlabcpcBasePrompt):
         if not self.input == 'y':
             print("will only export open issues")
             self.input = 'opened'
-            
+
 class BranchNamePrompt(GitlabcpcBasePrompt):
     class Meta:
         text = "Enter the branch name:"
